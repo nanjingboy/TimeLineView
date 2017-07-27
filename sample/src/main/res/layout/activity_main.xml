@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:gravity="center"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello world"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <me.tom.timelineview.TimeLineView
+                android:id="@+id/timeLineView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:background="@android:color/white"
+                app:titleFontSize="@dimen/timeline_view_title_font_size"
+                app:contentFontSize="@dimen/timeline_view_content_font_size"
+                app:dateTimeFontSize="@dimen/timeline_view_datetime_font_size"
+                app:textColor="@color/colorTimeLineViewTextColor"
+                app:highlightTextColor="@color/colorTimeLineViewHighlightTextColor"
+                app:lineWidth="@dimen/timeline_view_line_width"
+                app:circleRadius="@dimen/timeline_view_circle_radius"
+                app:highlightCircleBorderWidth="@dimen/timeline_view_highlight_circle_border_width"
+                app:highlightCircleBorderColor="@color/colorTimeLineViewHighlightCircleBorderColor"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
