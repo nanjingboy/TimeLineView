@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="timeline_view_title_font_size">12sp</dimen>
+    <dimen name="timeline_view_content_font_size">12sp</dimen>
+    <dimen name="timeline_view_datetime_font_size">12sp</dimen>
+    <dimen name="timeline_view_line_width">1dp</dimen>
+    <dimen name="timeline_view_circle_radius">4dp</dimen>
+    <dimen name="timeline_view_highlight_circle_border_width">2dp</dimen>
+    <dimen name="timeline_view_record_content_panel_left_space_size">23dp</dimen>
+    <dimen name="timeline_view_record_content_panel_bottom_space_size">20dp</dimen>
+</resources>

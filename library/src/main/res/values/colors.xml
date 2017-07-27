@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorTimeLineViewTextColor">#A6A6A6</color>
+    <color name="colorTimeLineViewHighlightTextColor">#F2C041</color>
+    <color name="colorTimeLineViewHighlightCircleBorderColor">#7FF2C041</color>
+</resources>
