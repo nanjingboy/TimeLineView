@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.nanjingboy:TimeLineView:1.0.0'
+    compile 'com.github.nanjingboy:TimeLineView:1.1.0'
 }
 ```
 
