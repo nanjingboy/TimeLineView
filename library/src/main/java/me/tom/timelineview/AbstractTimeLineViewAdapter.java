@@ -24,6 +24,7 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
     private int mHighlightCircleBorderWidth;
     private int mHighlightCircleBorderColor;
 
+    private int mBottomSpaceSize;
     private int mContentPanelBottomSpaceSize;
 
     private static class ViewHolder {
@@ -39,6 +40,9 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
 
     public AbstractTimeLineViewAdapter(Context context) {
         Resources resources = context.getResources();
+        mBottomSpaceSize = resources.getDimensionPixelSize(
+                R.dimen.timeline_view_bottom_space_size
+        );
         mContentPanelBottomSpaceSize = resources.getDimensionPixelSize(
                 R.dimen.timeline_view_record_content_panel_bottom_space_size
         );
@@ -146,15 +150,10 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
         int recordsCount = getRecordsCount();
         holder.lineView.setBackgroundColor(mTextColor);
         holder.lineView.setLayoutParams(lineViewParams);
-        if (recordsCount == 1 || position < recordsCount - 1) {
-            holder.lineView.setVisibility(View.VISIBLE);
-        } else {
-            holder.lineView.setVisibility(View.INVISIBLE);
-        }
 
         LinearLayout.LayoutParams contentPanelParams = (LinearLayout.LayoutParams) holder.contentPanel.getLayoutParams();
         if (position == recordsCount - 1) {
-            contentPanelParams.bottomMargin = 0;
+            contentPanelParams.bottomMargin = mBottomSpaceSize;
         }  else {
             contentPanelParams.bottomMargin = mContentPanelBottomSpaceSize;
         }
