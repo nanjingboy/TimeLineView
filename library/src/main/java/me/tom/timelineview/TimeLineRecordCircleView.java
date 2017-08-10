@@ -65,7 +65,7 @@ public class TimeLineRecordCircleView extends View {
             mPaint.setColor(mHighlightCircleBorderColor);
             canvas.drawCircle(mCircleRadius, mCircleRadius, mCircleRadius, mPaint);
             mPaint.setColor(mCircleColor);
-            canvas.drawCircle(mCircleRadius, mCircleRadius, mCircleRadius - mHighlightCircleBorderWidth / 2, mPaint);
+            canvas.drawCircle(mCircleRadius, mCircleRadius, mCircleRadius - mHighlightCircleBorderWidth, mPaint);
         } else {
             mPaint.setColor(mCircleColor);
             canvas.drawCircle(mCircleRadius, mCircleRadius, mCircleRadius, mPaint);

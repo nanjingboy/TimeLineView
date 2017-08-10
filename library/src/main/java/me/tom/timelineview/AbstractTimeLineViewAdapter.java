@@ -114,25 +114,33 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
         }
 
         int textColor;
+        int circleRadius;
         boolean isRecordHighlight = isRecordHighlight(position);
         if (isRecordHighlight) {
             textColor = mHighlightTextColor;
+            circleRadius = mCircleRadius + mHighlightCircleBorderWidth;
         } else {
             textColor = mTextColor;
+            circleRadius = mCircleRadius;
         }
 
         LinearLayout.LayoutParams circleViewParams = (LinearLayout.LayoutParams) holder.circleView.getLayoutParams();
-        circleViewParams.width = mCircleRadius * 2;
-        circleViewParams.height = mCircleRadius * 2;
+        circleViewParams.width = circleRadius * 2;
+        circleViewParams.height = circleRadius * 2;
+        if (isRecordHighlight) {
+            circleViewParams.leftMargin = 0;
+        } else {
+            circleViewParams.leftMargin = mHighlightCircleBorderWidth;
+        }
         holder.circleView.setLayoutParams(circleViewParams);
-        holder.circleView.setCircleRadius(mCircleRadius);
+        holder.circleView.setCircleRadius(circleRadius);
         holder.circleView.setCircleColor(textColor);
         holder.circleView.setHighlightCircleBorderWidth(mHighlightCircleBorderWidth);
         holder.circleView.setHighlightCircleBorderColor(mHighlightCircleBorderColor);
         holder.circleView.setIsHighlight(isRecordHighlight);
 
         LinearLayout.LayoutParams lineViewParams = (LinearLayout.LayoutParams) holder.lineView.getLayoutParams();
-        lineViewParams.leftMargin = mCircleRadius - mLineWidth / 2;
+        lineViewParams.leftMargin = mCircleRadius + mHighlightCircleBorderWidth - mLineWidth / 2;
         lineViewParams.width = mLineWidth;
 
         int recordsCount = getRecordsCount();
