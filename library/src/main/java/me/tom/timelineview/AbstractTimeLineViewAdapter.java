@@ -1,80 +1,49 @@
 package me.tom.timelineview;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.TypedValue;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
 
-    private int mTitleFontSize;
-    private int mContentFontSize;
-    private int mDateTimeFontSize;
-
-    private int mTextColor;
-    private int mHighlightTextColor;
-
     private int mLineWidth;
+    private int mLineColor;
     private int mCircleRadius;
+    private int mHighlightCircleColor;
     private int mHighlightCircleBorderWidth;
     private int mHighlightCircleBorderColor;
-
-    private int mBottomSpaceSize;
-    private int mContentPanelBottomSpaceSize;
 
     private static class ViewHolder {
         TimeLineRecordCircleView circleView;
         View lineView;
         LinearLayout contentPanel;
-        TextView titleView;
-        TextView contentView;
-        TextView dateTimeView;
+        LinearLayout sliderPanel;
     }
 
     private LayoutInflater mInflater;
 
     public AbstractTimeLineViewAdapter(Context context) {
-        Resources resources = context.getResources();
-        mBottomSpaceSize = resources.getDimensionPixelSize(
-                R.dimen.timeline_view_bottom_space_size
-        );
-        mContentPanelBottomSpaceSize = resources.getDimensionPixelSize(
-                R.dimen.timeline_view_record_content_panel_bottom_space_size
-        );
         mInflater = LayoutInflater.from(context);
-    }
-
-    void setTitleFontSize(int titleFontSize) {
-        mTitleFontSize = titleFontSize;
-    }
-
-    void setContentFontSize(int contentFontSize) {
-        mContentFontSize = contentFontSize;
-    }
-
-    void setDateTimeFontSize(int dateTimeFontSize) {
-        mDateTimeFontSize = dateTimeFontSize;
-    }
-
-    void setTextColor(int textColor) {
-        mTextColor = textColor;
-    }
-
-    void setHighlightTextColor(int highlightTextColor) {
-        mHighlightTextColor = highlightTextColor;
     }
 
     void setLineWidth(int lineWidth) {
         mLineWidth = lineWidth;
     }
 
+    void setLineColor(int lineColor) {
+        mLineColor = lineColor;
+    }
+
     void setCircleRadius(int circleRadius) {
         mCircleRadius = circleRadius;
+    }
+
+    void setHighlightCircleColor(int highlightCircleColor) {
+        mHighlightCircleColor = highlightCircleColor;
     }
 
     void setHighlightCircleBorderWidth(int highlightCircleBorderWidth) {
@@ -87,7 +56,7 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
 
     @Override
     public final int getCount() {
-        return getRecordsCount();
+        return getRecordCount();
     }
 
     @Override
@@ -105,28 +74,28 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
         ViewHolder holder;
         if (view == null) {
             holder = new ViewHolder();
-            view = mInflater.inflate(R.layout.timeline_record, null, false);
-            holder.circleView = (TimeLineRecordCircleView) view.findViewById(R.id.circleView);
+            view = mInflater.inflate(R.layout.time_line_record_container, null, false);
+            holder.circleView = view.findViewById(R.id.circleView);
             holder.lineView = view.findViewById(R.id.lineView);
-            holder.contentPanel = (LinearLayout) view.findViewById(R.id.contentPanel);
-            holder.titleView = (TextView) view.findViewById(R.id.titleView);
-            holder.contentView = (TextView) view.findViewById(R.id.contentView);
-            holder.dateTimeView = (TextView) view.findViewById(R.id.dateTimeView);
+            holder.sliderPanel = view.findViewById(R.id.sliderPanel);
+            holder.contentPanel = view.findViewById(R.id.contentPanel);
+            holder.contentPanel.addView(getRecordView(position));
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        int textColor;
         int circleRadius;
         boolean isRecordHighlight = isRecordHighlight(position);
         if (isRecordHighlight) {
-            textColor = mHighlightTextColor;
             circleRadius = mCircleRadius + mHighlightCircleBorderWidth;
         } else {
-            textColor = mTextColor;
             circleRadius = mCircleRadius;
         }
+
+        LinearLayout.LayoutParams sliderPanelParams = (LinearLayout.LayoutParams) holder.sliderPanel.getLayoutParams();
+        sliderPanelParams.width = (mHighlightCircleBorderWidth + mCircleRadius) * 2;
+        holder.sliderPanel.setLayoutParams(sliderPanelParams);
 
         LinearLayout.LayoutParams circleViewParams = (LinearLayout.LayoutParams) holder.circleView.getLayoutParams();
         circleViewParams.width = circleRadius * 2;
@@ -138,7 +107,11 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
         }
         holder.circleView.setLayoutParams(circleViewParams);
         holder.circleView.setCircleRadius(circleRadius);
-        holder.circleView.setCircleColor(textColor);
+        if (isRecordHighlight) {
+            holder.circleView.setCircleColor(mHighlightCircleColor);
+        } else {
+            holder.circleView.setCircleColor(mLineColor);
+        }
         holder.circleView.setHighlightCircleBorderWidth(mHighlightCircleBorderWidth);
         holder.circleView.setHighlightCircleBorderColor(mHighlightCircleBorderColor);
         holder.circleView.setIsHighlight(isRecordHighlight);
@@ -147,35 +120,17 @@ public abstract class AbstractTimeLineViewAdapter extends BaseAdapter {
         lineViewParams.leftMargin = mCircleRadius + mHighlightCircleBorderWidth - mLineWidth / 2;
         lineViewParams.width = mLineWidth;
 
-        int recordsCount = getRecordsCount();
-        holder.lineView.setBackgroundColor(mTextColor);
+        holder.lineView.setBackgroundColor(mLineColor);
         holder.lineView.setLayoutParams(lineViewParams);
 
         LinearLayout.LayoutParams contentPanelParams = (LinearLayout.LayoutParams) holder.contentPanel.getLayoutParams();
-        if (position == recordsCount - 1) {
-            contentPanelParams.bottomMargin = mBottomSpaceSize;
-        }  else {
-            contentPanelParams.bottomMargin = mContentPanelBottomSpaceSize;
-        }
+        contentPanelParams.bottomMargin = getRecordBottomSize();
         holder.contentPanel.setLayoutParams(contentPanelParams);
-
-        holder.titleView.setText(getRecordTitle(position));
-        holder.titleView.setTextColor(textColor);
-        holder.titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleFontSize);
-
-        holder.contentView.setText(getRecordContent(position));
-        holder.contentView.setTextColor(textColor);
-        holder.contentView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContentFontSize);
-
-        holder.dateTimeView.setText(getRecordDateTime(position));
-        holder.dateTimeView.setTextColor(textColor);
-        holder.dateTimeView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mDateTimeFontSize);
         return view;
     }
 
-    abstract public int getRecordsCount();
-    abstract public String getRecordTitle(int position);
-    abstract public String getRecordContent(int position);
-    abstract public String getRecordDateTime(int position);
+    abstract public int getRecordCount();
+    abstract public int getRecordBottomSize();
     abstract public boolean isRecordHighlight(int position);
+    abstract public View getRecordView(int position);
 }

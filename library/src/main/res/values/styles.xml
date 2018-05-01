@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TimeLineView">
-        <attr name="titleFontSize" format="dimension|reference"/>
-        <attr name="contentFontSize" format="dimension|reference"/>
-        <attr name="dateTimeFontSize" format="dimension|reference"/>
-        <attr name="textColor" format="color|reference"/>
-        <attr name="highlightTextColor" format="color|reference"/>
         <attr name="lineWidth" format="dimension|reference"/>
         <attr name="circleRadius" format="dimension|reference"/>
+        <attr name="lineColor" format="color|reference"/>
         <attr name="highlightCircleBorderWidth" format="dimension|reference"/>
+        <attr name="highlightCircleColor" format="color|reference"/>
         <attr name="highlightCircleBorderColor" format="color|reference"/>
     </declare-styleable>
 </resources>

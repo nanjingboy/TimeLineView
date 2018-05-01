@@ -11,15 +11,10 @@ import android.widget.LinearLayout;
 
 public class TimeLineView extends LinearLayout {
 
-    private int mTitleFontSize;
-    private int mContentFontSize;
-    private int mDateTimeFontSize;
-
-    private int mTextColor;
-    private int mHighlightTextColor;
-
     private int mLineWidth;
+    private int mLineColor;
     private int mCircleRadius;
+    private int mHighlightCircleColor;
     private int mHighlightCircleBorderWidth;
     private int mHighlightCircleBorderColor;
 
@@ -49,33 +44,21 @@ public class TimeLineView extends LinearLayout {
         super(context, attrs, defStyle);
         Resources resources = getResources();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimeLineView);
-        mTitleFontSize = typedArray.getDimensionPixelSize(
-                R.styleable.TimeLineView_titleFontSize,
-                resources.getDimensionPixelOffset(R.dimen.timeline_view_title_font_size)
-        );
-        mContentFontSize = typedArray.getDimensionPixelSize(
-                R.styleable.TimeLineView_contentFontSize,
-                resources.getDimensionPixelSize(R.dimen.timeline_view_content_font_size)
-        );
-        mDateTimeFontSize = typedArray.getDimensionPixelSize(
-                R.styleable.TimeLineView_dateTimeFontSize,
-                resources.getDimensionPixelSize(R.dimen.timeline_view_datetime_font_size)
-        );
-        mTextColor = typedArray.getColor(
-                R.styleable.TimeLineView_textColor,
-                ContextCompat.getColor(context, R.color.colorTimeLineViewTextColor)
-        );
-        mHighlightTextColor = typedArray.getColor(
-                R.styleable.TimeLineView_highlightTextColor,
-                ContextCompat.getColor(context, R.color.colorTimeLineViewHighlightTextColor)
-        );
         mLineWidth = typedArray.getDimensionPixelSize(
                 R.styleable.TimeLineView_lineWidth,
                 resources.getDimensionPixelSize(R.dimen.timeline_view_line_width)
         );
+        mLineColor = typedArray.getColor(
+                R.styleable.TimeLineView_lineColor,
+                ContextCompat.getColor(context, R.color.colorTimeLineViewLineColor)
+        );
         mCircleRadius = typedArray.getDimensionPixelSize(
                 R.styleable.TimeLineView_circleRadius,
                 resources.getDimensionPixelSize(R.dimen.timeline_view_circle_radius)
+        );
+        mHighlightCircleColor = typedArray.getColor(
+                R.styleable.TimeLineView_highlightCircleColor,
+                ContextCompat.getColor(context, R.color.colorTimeLineViewHighlightCircleColor)
         );
         mHighlightCircleBorderWidth = typedArray.getDimensionPixelSize(
                 R.styleable.TimeLineView_highlightCircleBorderWidth,
@@ -89,40 +72,6 @@ public class TimeLineView extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
-    public void setTitleFontSize(int titleFontSize) {
-        mTitleFontSize = titleFontSize;
-        if (mAdapter != null) {
-            mAdapter.setTitleFontSize(titleFontSize);
-        }
-    }
-
-    public void setContentFontSize(int contentFontSize) {
-        mContentFontSize = contentFontSize;
-        if (mAdapter != null) {
-            mAdapter.setContentFontSize(contentFontSize);
-        }
-    }
-
-    public void setDateTimeFontSize(int dateTimeFontSize) {
-        mDateTimeFontSize = dateTimeFontSize;
-        if (mAdapter != null) {
-            mAdapter.setDateTimeFontSize(dateTimeFontSize);
-        }
-    }
-
-    public void setTextColor(int textColor) {
-        mTextColor = textColor;
-        if (mAdapter != null) {
-            mAdapter.setTextColor(textColor);
-        }
-    }
-
-    public void setHighlightTextColor(int highlightTextColor) {
-        mHighlightTextColor = highlightTextColor;
-        if (mAdapter != null) {
-            mAdapter.setHighlightTextColor(highlightTextColor);
-        }
-    }
 
     public void setLineWidth(int lineWidth) {
         mLineWidth = lineWidth;
@@ -131,10 +80,24 @@ public class TimeLineView extends LinearLayout {
         }
     }
 
+    public void setLineColor(int lineColor) {
+        mLineColor = lineColor;
+        if (mAdapter != null) {
+            mAdapter.setLineColor(lineColor);
+        }
+    }
+
     public void setCircleRadius(int circleRadius) {
         mCircleRadius = circleRadius;
         if (mAdapter != null) {
             mAdapter.setCircleRadius(circleRadius);
+        }
+    }
+
+    public void setHighlightCircleColor(int highlightCircleColor) {
+        mHighlightCircleColor = highlightCircleColor;
+        if (mAdapter != null) {
+            mAdapter.setHighlightCircleColor(highlightCircleColor);
         }
     }
 
@@ -159,13 +122,10 @@ public class TimeLineView extends LinearLayout {
         mAdapter = adapter;
         if (mAdapter != null) {
             mAdapter.registerDataSetObserver(mObserver);
-            mAdapter.setTitleFontSize(mTitleFontSize);
-            mAdapter.setContentFontSize(mContentFontSize);
-            mAdapter.setDateTimeFontSize(mDateTimeFontSize);
-            mAdapter.setTextColor(mTextColor);
-            mAdapter.setHighlightTextColor(mHighlightTextColor);
             mAdapter.setLineWidth(mLineWidth);
+            mAdapter.setLineColor(mLineColor);
             mAdapter.setCircleRadius(mCircleRadius);
+            mAdapter.setHighlightCircleColor(mHighlightCircleColor);
             mAdapter.setHighlightCircleBorderWidth(mHighlightCircleBorderWidth);
             mAdapter.setHighlightCircleBorderColor(mHighlightCircleBorderColor);
         }
@@ -175,7 +135,7 @@ public class TimeLineView extends LinearLayout {
     protected void refreshViews() {
         removeAllViews();
         if (mAdapter != null) {
-            int count = mAdapter.getRecordsCount();
+            int count = mAdapter.getRecordCount();
             for (int position = 0; position < count; position++) {
                 View view = mAdapter.getView(position, null, this);
                 addView(view, position);
